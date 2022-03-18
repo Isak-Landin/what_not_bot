@@ -1,0 +1,4 @@
+from help_scripts import executing_chrome
+
+executing_chrome.remove_all_existing_instances()
+executing_chrome.start_chrome(8001)
