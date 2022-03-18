@@ -13,7 +13,22 @@ def driver_get(driver, url):
     driver.get(url)
 
 
-def find_object_XPATH(driver, time_to_wait, _xpath):
+def find_object_attribute(driver, time_to_wait, attribute, attribute_value, to_print=False):
+    object_to_find = None
+    success = False
+    try:
+        object_to_find = WebDriverWait(driver, time_to_wait).until(EC.presence_of_element_located(
+            (By.XPATH, attribute)))
+        success = True
+    except:
+        print('Could not find the object', attribute, attribute_value)
+        if to_print is True:
+            print(traceback.print_exc())
+    finally:
+        return object_to_find, success
+
+
+def find_object_XPATH(driver, time_to_wait, _xpath, to_print=False):
     object_to_find = None
     success = False
     try:
@@ -22,12 +37,13 @@ def find_object_XPATH(driver, time_to_wait, _xpath):
         success = True
     except:
         print('Could not find the object', _xpath)
-        print(traceback.print_exc())
+        if to_print is True:
+            print(traceback.print_exc())
     finally:
         return object_to_find, success
 
 
-def find_objects_XPATH(driver, time_to_wait, _xpath):
+def find_objects_XPATH(driver, time_to_wait, _xpath, to_print=True):
     objects_to_find = None
     success = False
     try:
@@ -35,7 +51,8 @@ def find_objects_XPATH(driver, time_to_wait, _xpath):
             (By.XPATH, _xpath)))
         success = True
     except:
-        print('Could not find the object', _xpath)
+        if to_print is True:
+            print('Could not find the object', _xpath)
     finally:
         return objects_to_find, success
 

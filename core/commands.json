@@ -1,0 +1,6 @@
+{
+    "commands": {
+        "!rng": "You have boosted RNG NAME",
+        "!test": "Test response"
+    }
+}
