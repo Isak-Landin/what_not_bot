@@ -38,7 +38,5 @@ if __name__ == '__main__':
     reading_chat_for_users_to_greet_thread.start()
     sending_messages_thread.start()
 
-    print(reading_class.to_be_greeted)
-
 
 

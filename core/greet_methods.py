@@ -2,6 +2,7 @@ import time
 from help_scripts import selenium_operator as sop
 from core import initiate_control_port as selenium_override
 import traceback
+from sys import exit
 
 
 class Reading:
@@ -59,7 +60,6 @@ class Reading:
     def get_all_chat_messages(self, to_greet, not_to_greet):
         time.sleep(1)
         while True:
-            print('Waiting to be greeted: ', to_greet)
             try:
                 all_usernames_and_messages = None
                 all_usernames = []
@@ -81,7 +81,7 @@ class Reading:
                     _xpath='./div'
                 )
 
-                for user_info in users_specific_info[-5:]:
+                for user_info in users_specific_info[-5:-1]:
                     try:
                         user_with_image, succeeded = sop.find_child_XPATH(
                             parent_object=user_info,
@@ -107,7 +107,7 @@ class Reading:
                         except:
                             pass
 
-                    if name is None or name == 'Chat paused due to scroll' or name == '':
+                    if name is None or name == 'Chat paused due to scroll' or name == '' or name == 'utbisalan':
                         pass
 
                     else:
@@ -116,7 +116,7 @@ class Reading:
                             name = name[0]
                         except:
                             pass
-                        if name not in to_greet and name not in not_to_greet:
+                        if name not in to_greet and name not in not_to_greet and name != 'utbisalan':
                             to_greet.append(name)
             except:
                 print(traceback.print_exc())

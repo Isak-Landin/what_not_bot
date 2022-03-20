@@ -3,17 +3,22 @@ import json
 from help_scripts import selenium_operator as sop
 from pathlib import Path
 import traceback
+from sys import exit
 
 class Commands:
     def __init__(self, chat_element, driver):
         self.path_main = str(Path().resolve())
         self.driver = driver
         self.chat_element = chat_element
+
         self.commands_full_data = self.get_commands_from_storage()
         self.commands_keys = []
         self.get_keys_from_full_command_data()
+
         self.commands_to_execute = []
+        self.commands_already_executed = []
         self.user_specific_command_request = []
+
         self.cooldown = time.time()
 
     def get_commands_from_storage(self):
@@ -38,14 +43,12 @@ class Commands:
         for key in self.commands_full_data:
             self.commands_keys.append(key)
 
-    def look_for_commands_in_chat(self, commands_to_execute, place_holder):
+    def look_for_commands_in_chat(self, commands_to_execute, commands_already_executed):
         while True:
-            # print('Current commands waiting to be executed: ', commands_to_execute)
-            print('COMMANDING')
             command = None
             name = None
             all_usernames_and_commands_div = None
-            name_command_list = None
+            name_command_list_index = None
             try:
                 all_usernames_and_commands_div, succeeded = sop.find_child_XPATH(
                     parent_object=self.chat_element,
@@ -62,8 +65,7 @@ class Commands:
                 _xpath='./div'
             )
 
-            for user_cmd in users_specific_commands[-5:]:
-                print(user_cmd)
+            for user_cmd in users_specific_commands[-6:-1]:
                 try:
                     user_with_image, succeeded = sop.find_child_XPATH(
                         parent_object=user_cmd,
@@ -80,54 +82,70 @@ class Commands:
                         _xpath='./div[1]/span[2]'
                     )
 
-                    name = username_with_image_name.text
-                    command = username_with_image_cmd.text
-
-
-                except:
-                    print('##############################')
-
                     try:
-                        user_with_no_image, succeeded = sop.find_child_XPATH(
-                            parent_object=user_cmd,
-                            _xpath='./div[2]'
-                        )
-
-                        username_with_no_image_name, succeeded = sop.find_child_XPATH(
-                            parent_object=user_cmd,
-                            _xpath='./div[2/span[1]'
-                        )
-
-                        username_with_no_image_cmd, succeeded = sop.find_child_XPATH(
-                            parent_object=user_cmd,
-                            _xpath='.div[2]/span[2]'
-                        )
-
-                        name = username_with_no_image_name.text
-                        command = username_with_no_image_cmd.text
-
+                        name = username_with_image_name.text
                     except:
-                        print('Failed to find both types of users')
+                        pass
+                    try:
+                        command = username_with_image_cmd.text
+                    except:
+                        pass
+
+                finally:
+
+                    if succeeded is False:
+
+                        try:
+                            user_with_no_image, succeeded = sop.find_child_XPATH(
+                                parent_object=user_cmd,
+                                _xpath='./div[2]'
+                            )
+
+                            username_with_no_image_name, succeeded = sop.find_child_XPATH(
+                                parent_object=user_cmd,
+                                _xpath='./div[2]/span[1]'
+                            )
+
+                            username_with_no_image_cmd, succeeded = sop.find_child_XPATH(
+                                parent_object=user_cmd,
+                                _xpath='./div[2]/span[2]'
+                            )
+                            try:
+                                name = username_with_no_image_name.text
+                            except:
+                                print('FAILED!!!')
+                            try:
+                                command = username_with_no_image_cmd.text
+                            except:
+                                print('FAILED!!!')
+
+                        except:
+                            print('Failed to find both types of users')
 
                 if name is None or name == 'Chat paused due to scroll' or name == ''\
                         or command is None:
                     print('Command or something else was None or invalid')
-                    print(name, command)
                     pass
 
                 else:
+                    print(name, command)
                     if command in self.commands_keys:
                         print('Putting together command and name')
                         try:
                             name = name.split(':')
                             name = name[0]
 
-                            name_command_list = [name, command]
+                            print('Name after removal of semicolon ', name)
+
+                            name_command_list_index = [name, command, users_specific_commands.index(user_cmd)]
                         except:
                             pass
 
-                        if name_command_list not in commands_to_execute:
-                            print('Adding command to list', name_command_list)
-                            commands_to_execute.append(name)
+                        if name_command_list_index not in commands_to_execute\
+                                and name_command_list_index:
+                            print('Adding command to list', name_command_list_index)
+                            commands_to_execute.append(name_command_list_index)
+                            commands_already_executed.append(name_command_list_index[2])
+                            print('index for command in list of messages: ', name_command_list_index[2])
                     else:
                         pass

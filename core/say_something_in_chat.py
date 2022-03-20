@@ -3,6 +3,7 @@ import time
 import random
 import traceback
 from selenium.webdriver.common.keys import Keys
+from sys import exit
 
 
 def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
@@ -40,29 +41,30 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
             to_send_command = current_time % last_command_time > 5
             to_send_greeting = current_time % last_greeting_time > 5
 
-            to_send_greeting = False
-
             # Temoporary false in place to only test commands
             # to_send_greeting = False
             if len(to_greet) > 0 and to_send_greeting is True:
                 print('Trying to greet')
+                print('To be greeted: ', to_greet)
+                print('Already greeted: ', already_greeted_list)
                 try:
                     index_of_phrases = random.randint(0, (len(phrases) - 1))
 
                     person_to_greet = to_greet.pop(0)
                     if person_to_greet in to_greet:
                         to_greet.remove(person_to_greet)
-                    person_to_greet = f'Hello {person_to_greet}, {phrases[index_of_phrases]}'
+                    if person_to_greet in already_greeted_list:
+                        continue
+                    person_to_greet_phrase = f'Hello {person_to_greet}, {phrases[index_of_phrases]}'
                     already_greeted_list.append(person_to_greet)
 
-                    chatbox.send_keys(person_to_greet)
+                    chatbox.send_keys(person_to_greet_phrase)
                     chatbox.send_keys(Keys.ENTER)
                     last_greeting_time = time.time()
                 except:
                     print('Failed testing a greeting')
 
             if len(commands_to_be_executed) > 0 and to_send_command is True:
-                print('Trying to command', commands_to_be_executed)
                 try:
                     command_to_execute = commands_to_be_executed.pop(0)
 
@@ -70,7 +72,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
                         commands_to_be_executed.remove(command_to_execute)
 
                     response_name = command_to_execute[0]
-                    response_command = command_all_data['commands'][command_to_execute[1]]
+                    response_command = command_all_data[command_to_execute[1]]
 
                     if 'NAME' in response_command:
                         response_command = response_command.replace('NAME', response_name)
@@ -80,6 +82,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
                     last_command_time = time.time()
                 except:
                     print('Failed testing a command')
+                    print(traceback.print_exc())
 
         except:
             print(traceback.print_exc())

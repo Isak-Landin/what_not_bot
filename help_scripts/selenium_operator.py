@@ -7,6 +7,7 @@ import pathlib
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import traceback
+from sys import exit
 
 
 def driver_get(driver, url):
