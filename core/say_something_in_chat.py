@@ -15,16 +15,55 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
     try:
         chatbox, succeeded = sop.find_object_XPATH(
             driver=driver,
-            time_to_wait=5,
+            time_to_wait=2,
             _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[6]/div[1]/input'
+                   #//*[@id="app"]/div[1]/div[2]/div[4]/div/div[4]/div[1]/input
         )
+
+        print(chatbox)
 
         if succeeded is False:
             chatbox, succeeded = sop.find_object_XPATH(
                 driver=driver,
-                time_to_wait=5,
+                time_to_wait=2,
                 _xpath='/html/body/div[1]/div[1]/div[2]/div[3]/div/div[6]/div[1]/input'
             )
+
+            print(chatbox)
+
+            if succeeded is False:
+                chatbox, succeeded = sop.find_object_XPATH(
+                    driver=driver,
+                    time_to_wait=2,
+                    _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[4]/div[1]/input'
+                )
+
+                print(chatbox)
+
+                if succeeded is False:
+                    chatbox, succeeded = sop.find_object_XPATH(
+                        driver=driver,
+                        time_to_wait=2,
+                        _xpath='//*[@id="app"]/div[2]/div/div/div[1]/div[4]/div/div[1]/div[3]/div[3]/div[1]/input'
+                    )
+
+                    print(chatbox)
+
+                    if succeeded is False:
+                        chatbox, succeeded = sop.find_object_XPATH(
+                            driver=driver,
+                            time_to_wait=4,
+                            _xpath='//*[@id="app"]/div[1]/div[2]/div[4]/div/div[4]/div[1]/input'
+                        )
+
+                        print(chatbox)
+
+                        if succeeded is False:
+                            chatbox, succeeded = sop.find_object_XPATH(
+                                driver=driver,
+                                time_to_wait=5,
+                                _xpath='/html/body/div/div[1]/div[2]/div[4]/div/div[4]/div[1]/input'
+                            )
     except:
         print(traceback.print_exc())
         exit('Failed finding chatbox!!')
@@ -41,7 +80,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
             to_send_command = current_time % last_command_time > 5
             to_send_greeting = current_time % last_greeting_time > 5
 
-            # Temoporary false in place to only test commands
+            # Temporary false in place to only test commands
             # to_send_greeting = False
             if len(to_greet) > 0 and to_send_greeting is True:
                 print('Trying to greet')

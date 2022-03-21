@@ -10,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
+from sys import exit
 
 path = str(pathlib.Path(__file__).parent.resolve())
 path_to_chrome_instances = path + r'\instances_of_chrome'

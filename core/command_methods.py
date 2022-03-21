@@ -128,7 +128,6 @@ class Commands:
                     pass
 
                 else:
-                    print(name, command)
                     if command in self.commands_keys:
                         print('Putting together command and name')
                         try:
@@ -142,7 +141,7 @@ class Commands:
                             pass
 
                         if name_command_list_index not in commands_to_execute\
-                                and name_command_list_index:
+                                and name_command_list_index[2] not in commands_already_executed:
                             print('Adding command to list', name_command_list_index)
                             commands_to_execute.append(name_command_list_index)
                             commands_already_executed.append(name_command_list_index[2])
