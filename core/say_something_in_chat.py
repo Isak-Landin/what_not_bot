@@ -83,9 +83,6 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
             # Temporary false in place to only test commands
             # to_send_greeting = False
             if len(to_greet) > 0 and to_send_greeting is True:
-                print('Trying to greet')
-                print('To be greeted: ', to_greet)
-                print('Already greeted: ', already_greeted_list)
                 try:
                     index_of_phrases = random.randint(0, (len(phrases) - 1))
 

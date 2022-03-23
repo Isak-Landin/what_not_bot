@@ -5,6 +5,7 @@ try:
     from core import greet_methods as gm
     from core import command_methods as cm
     from core import say_something_in_chat as talk
+    from core import read_polling
 
 
     class NotAName(Exception):
@@ -40,6 +41,17 @@ try:
         reading_chat_for_users_to_greet_thread.start()
         sending_messages_thread.start()
 
+        test_vote_alternatives = ['Apple', 'Nokia', 'Samsung']
+        reading_for_votes_object = read_polling.ReadingPollChat(driver=reading_class.return_driver(),
+                                                                chat_element=reading_class.get_chat_element())
+        reading_for_votes_object.timer = 60
+        polling = threading.Thread(target=reading_for_votes_object.look_for_alternatives_in_chat,
+                                   args=[
+                                       reading_for_votes_object.timer, test_vote_alternatives,
+                                       reading_for_votes_object.data_sizes,
+                                       reading_for_votes_object.user_data_is_collected])
+
+        polling.start()
 except:
     print(traceback.print_exc())
     time.sleep(10000)

@@ -129,12 +129,9 @@ class Commands:
 
                 else:
                     if command in self.commands_keys:
-                        print('Putting together command and name')
                         try:
                             name = name.split(':')
                             name = name[0]
-
-                            print('Name after removal of semicolon ', name)
 
                             name_command_list_index = [name, command, users_specific_commands.index(user_cmd)]
                         except:

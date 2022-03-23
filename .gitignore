@@ -153,3 +153,4 @@ cython_debug/
 .idea/workspace.xml
 .idea
 modules_to_add
+help_scripts/instances_of_chrome

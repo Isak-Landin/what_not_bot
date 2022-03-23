@@ -6,7 +6,8 @@ from sys import exit
 
 
 class Reading:
-    def __init__(self):
+    def __init__(self, name_of_bot):
+        self.name_of_bot = name_of_bot
         self.already_greeted = []
         self.to_be_greeted = []
         self.driver = selenium_override.initiate_driver()
@@ -64,6 +65,7 @@ class Reading:
                 all_usernames_and_messages = None
                 all_usernames = []
                 name = None
+                message = None
                 try:
 
                     all_usernames_and_messages, succeeded = sop.find_child_XPATH(
@@ -93,7 +95,13 @@ class Reading:
                             _xpath='./div[1]/span[1]'
                         )
 
+                        username_with_image_message, succeeded = sop.find_child_XPATH(
+                            parent_object=user_info,
+                            _xpath='./div[1]/span[2]'
+                        )
+
                         name = user_with_image_name.text
+                        message = username_with_image_message.text
 
                     except:
                         try:
@@ -102,12 +110,24 @@ class Reading:
                                 _xpath='./div[2]'
                             )
 
-                            name = user_with_no_image.text
+                            username_with_no_image_name, succeeded = sop.find_child_XPATH(
+                                parent_object=user_info,
+                                _xpath='./div[2]/span[1]'
+                            )
+
+                            username_with_no_image_message, succeeded = sop.find_child_XPATH(
+                                parent_object=user_info,
+                                _xpath='./div[2]/span[2]'
+                            )
+
+                            name = username_with_no_image_name.text
+                            message = username_with_no_image_message.text
 
                         except:
                             pass
 
-                    if name is None or name == 'Chat paused due to scroll' or name == '' or name == 'utbisalan':
+                    if name is None or name == 'Chat paused due to scroll' or name == '' or name == 'utbisalan'\
+                            or 'joined' in message or 'Joined' in message:
                         pass
 
                     else:
@@ -116,7 +136,7 @@ class Reading:
                             name = name[0]
                         except:
                             pass
-                        if name not in to_greet and name not in not_to_greet and name != 'utbisalan':
+                        if name not in to_greet and name not in not_to_greet and name != self.name_of_bot:
                             to_greet.append(name)
             except:
                 print(traceback.print_exc())
