@@ -13,12 +13,9 @@ class ReadingPollChat:
         self.data_sizes = []
         self.chat_element = chat_element
 
-        self.timer = 0
-
     def clear_all_data(self):
         self.user_data_is_collected = []
         self.data_sizes = []
-        self.timer = 0
 
     def visualize_data(self):
         pass

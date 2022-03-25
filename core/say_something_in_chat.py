@@ -1,15 +1,19 @@
+import json
 from help_scripts import selenium_operator as sop
 import time
 import random
 import traceback
 from selenium.webdriver.common.keys import Keys
 from sys import exit
+from pathlib import Path
 
 
 def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
                   commands_to_be_executed, last_command_time, command_all_data):
-    phrases = ["it's great seeing you here!", "what a pleasure seeing you here!",
-               "welcome to the stream of opportunity!", "days and nights pass and finally you are here"]
+    with open(str(Path().resolve()) + r'\core\greetings.json', 'r') as file:
+        phrases = json.load(file)
+        phrases = phrases['greetings']
+
     succeeded = False
     chatbox = None
     try:
