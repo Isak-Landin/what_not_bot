@@ -20,8 +20,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
         chatbox, succeeded = sop.find_object_XPATH(
             driver=driver,
             time_to_wait=2,
-            _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[6]/div[1]/input'
-                   #//*[@id="app"]/div[1]/div[2]/div[4]/div/div[4]/div[1]/input
+            _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[7]/div[1]/input'
         )
 
         print(chatbox)
@@ -85,7 +84,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
             to_send_greeting = current_time % last_greeting_time > 5
 
             # Temporary false in place to only test commands
-            # to_send_greeting = False
+            to_send_greeting = False
             if len(to_greet) > 0 and to_send_greeting is True:
                 try:
                     index_of_phrases = random.randint(0, (len(phrases) - 1))

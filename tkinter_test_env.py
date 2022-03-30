@@ -34,7 +34,7 @@ try:
                 function_to_call=self.get_entry_times_to_dupe).grid(column=2, row=0)
 
 
-            self.clear_entry_data = self.custom_button(text='Clear', function_to_call=self.clear_entry_data).grid(column=0, row=100)
+            self.clear_entry_data_button = self.custom_button(text='Clear', function_to_call=self.clear_entry_data).grid(column=0, row=100)
             self.start_poll = self.custom_button(text='Start Poll', function_to_call=self.get_entry_data_then_start, width=20).grid(column=1, row=100)
             self.quit_button = self.custom_button(text='Quit', function_to_call=self.kill_all).grid(column=0, row=101)
             self.root.mainloop()
@@ -59,7 +59,9 @@ try:
 
         def get_entry_times_to_dupe(self):
             if len(self.list_of_alternative_entries) > 0:
-                self.timer_entry_widget.destroy()
+                self.clear_entry_data()
+                if self.timer_entry_widget is not None:
+                    self.timer_entry_widget.destroy()
                 for entry in self.list_of_alternative_entries:
                     entry.destroy()
             try:
@@ -107,12 +109,20 @@ try:
             polling.start()
 
         def clear_entry_data(self):
-            self.root.geometry('500x200')
-            for entry in self.list_of_alternative_entries:
-                entry.destroy()
+            try:
+                self.root.geometry('500x200')
+                try:
+                    for entry in self.list_of_alternative_entries:
+                        entry.destroy()
+                except:
+                    print('No entries?')
+            except:
+                print(traceback.print_exc())
+            try:
+                self.timer_entry_widget.destroy()
+            except:
+                print('Could not destroy time widget, assuming it is not on screen')
             self.list_of_alternative_entries = []
-
-            self.timer_entry_widget.destroy()
 
         def kill_all(self):
             self.root.destroy()
