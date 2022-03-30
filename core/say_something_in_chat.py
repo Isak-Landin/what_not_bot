@@ -29,7 +29,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
             chatbox, succeeded = sop.find_object_XPATH(
                 driver=driver,
                 time_to_wait=2,
-                _xpath='/html/body/div[1]/div[1]/div[2]/div[3]/div/div[6]/div[1]/input'
+                _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[5]/div[1]/input'
             )
 
             print(chatbox)
