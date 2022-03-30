@@ -1,5 +1,6 @@
 
 try:
+    import time
     import traceback
     from tkinter import ttk
     from tkinter import *
@@ -10,7 +11,6 @@ try:
     from core import greet_methods as gm
     from core import command_methods as cm
     from core import say_something_in_chat as talk
-    import time
     from sys import exit
 
 
@@ -110,6 +110,7 @@ try:
             self.root.geometry('500x200')
             for entry in self.list_of_alternative_entries:
                 entry.destroy()
+            self.list_of_alternative_entries = []
 
             self.timer_entry_widget.destroy()
 
@@ -121,8 +122,6 @@ try:
 
     class Starting:
         def __init__(self):
-
-
             self.root = Tk()
             self.root.title('Starting the bot')
             self.root.geometry('300x150')
@@ -148,6 +147,9 @@ try:
         def __init__(self, name_of_bot):
             self.reading_class = gm.Reading(name_of_bot=name_of_bot)
             self.reading_class.last_message_sent_time = time.time()
+            while self.reading_class.chat_element is None:
+                print('The chat element is currently None')
+                time.sleep(1)
             self.commands_class = cm.Commands(chat_element=self.reading_class.get_chat_element(),
                                               driver=self.reading_class.return_driver())
 
@@ -182,8 +184,6 @@ try:
             self.reading_chat_for_users_to_greet_thread.join()
             self.sending_messages_thread.join()
             print('Quit all')
-
-
 
     Starting()
 

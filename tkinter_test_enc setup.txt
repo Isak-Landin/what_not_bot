@@ -1,0 +1,1 @@
+pyinstaller --hidden-import=matplotlib --hidden-import=pandas --hidden-import=numpy --hidden-import=pytz --hidden-import=dateutil tkinter_test_env.py

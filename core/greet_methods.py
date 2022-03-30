@@ -28,35 +28,27 @@ class Reading:
             return self.driver
 
     def get_chat_element(self):
-        try:
+
+        chat_element, succeeded = sop.find_object_XPATH(
+            driver=self.driver,
+            time_to_wait=2,
+            _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[2]'
+        )
+
+        if succeeded is False:
             chat_element, succeeded = sop.find_object_XPATH(
                 driver=self.driver,
-                time_to_wait=3,
-                _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[1]',
+                time_to_wait=2,
+                _xpath='//*[@id="app"]/div[2]/div/div/div[1]/div[4]/div/div[1]/div[3]/div[2]'
             )
 
-            if succeeded is False:
-                chat_element, succeeded = sop.find_object_XPATH(
-                    driver=self.driver,
-                    time_to_wait=2,
-                    _xpath='/html/body/div[1]/div[1]/div[2]/div[3]/div/div[1]'
-                )
+        if succeeded is False:
+            exit('Could not establish the chat window. The program is shutting down')
+        else:
+            print('We supposedly found the chat box')
+            print(chat_element)
 
-                if succeeded is False:
-                    chat_element, succeeded = sop.find_object_XPATH(
-                        driver=self.driver,
-                        time_to_wait=2,
-                        _xpath='//*[@id="app"]/div[1]/div[2]/div[4]/div/div[1]'
-                    )
-
-            if succeeded is False:
-                exit('Could not establish the chat window. The program is shutting down')
-
-            return chat_element
-
-        except:
-            print('Could not establish the chat window. The program is shutting down')
-            exit()
+        return chat_element
 
     def get_all_chat_messages(self, to_greet, not_to_greet):
         time.sleep(1)
@@ -76,7 +68,7 @@ class Reading:
                     if succeeded is False:
                         exit('Could not find the all_usernames_and_messages')
                 except:
-                    pass
+                    print(traceback.print_exc(), '################################################')
 
                 users_specific_info, succeeded = sop.find_children_XPATH(
                     parent_object=all_usernames_and_messages,

@@ -1,1 +1,0 @@
-pyinstaller --hidden-import=matplotlib --hidden-import=pandas tkinter_test_env.py
