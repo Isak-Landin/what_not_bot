@@ -97,7 +97,7 @@ def say_something(store_self, driver, to_greet, already_greeted_list, last_greet
             to_send_greeting = current_time % last_greeting_time > 5
 
             # Temporary false in place to only test commands
-            to_send_greeting = False
+            # to_send_greeting = False
             if len(to_greet) > 0 and to_send_greeting is True:
                 try:
                     index_of_phrases = random.randint(0, (len(phrases) - 1))
