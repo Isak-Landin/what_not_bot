@@ -12,6 +12,8 @@ try:
     from core import command_methods as cm
     from core import say_something_in_chat as talk
     from sys import exit
+    import start_chrome as sc
+    import os
 
 
     class GUIWindow:
@@ -145,6 +147,8 @@ try:
             self.name_of_bot_entry.grid(column=0, row=1)
             self.button_to_start_bot = ttk.Button(self.frame, text='Start bot', command=self.start_polling_window)
             self.button_to_start_bot.grid(column=1, row=1)
+            self.button_to_start_chrome = ttk.Button(self.frame, text='Start Chrome', command=self.start_chrome_instance)
+            self.button_to_start_chrome.grid(column=2, row=1)
             self.root.mainloop()
 
         def start_polling_window(self):
@@ -152,6 +156,13 @@ try:
             self.root.destroy()
             GUIWindow(name_of_bot=name_of_bot)
 
+        def start_chrome_instance(self):
+            is_started = sc.start_chrome_base()
+            print(is_started)
+            if is_started is True:
+                self.button_to_start_chrome['state'] = "disabled"
+            else:
+                pass
 
     class StartAndStoreThreadData:
         def __init__(self, name_of_bot):
@@ -175,6 +186,7 @@ try:
             self.sending_messages_thread = threading.Thread(
                 target=talk.say_something,
                 args=[
+                    self,
                     self.reading_class.return_driver(), self.reading_class.to_be_greeted,
                     self.reading_class.already_greeted, self.reading_class.last_message_sent_time,
                     self.commands_class.commands_to_execute, self.commands_class.cooldown,
@@ -190,10 +202,19 @@ try:
             self.sending_messages_thread.start()
 
         def stop_threads(self):
-            self.reading_chat_for_commands.join()
-            self.reading_chat_for_users_to_greet_thread.join()
-            self.sending_messages_thread.join()
+            if self.reading_chat_for_commands.is_alive():
+                self.reading_chat_for_commands.join()
+
+            if self.reading_chat_for_users_to_greet_thread.is_alive():
+                self.reading_chat_for_users_to_greet_thread.join()
+
+            if self.sending_messages_thread.is_alive():
+                self.sending_messages_thread.join()
+
+
             print('Quit all')
+            exit()
+
 
     Starting()
 

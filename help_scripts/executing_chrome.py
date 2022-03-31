@@ -24,7 +24,7 @@ def remove_all_existing_instances():
 
                 except:
                     print(traceback.print_exc())
-                    time.sleep(10)
+                    return False
 
 
 def start_chrome(port):
@@ -48,6 +48,7 @@ def start_chrome(port):
 
     except:
         print(traceback.print_exc())
+        return False
 
     finally:
         if driver is not None:

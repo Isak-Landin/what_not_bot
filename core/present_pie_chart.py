@@ -1,5 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import cv2 as parent_cv2
+import cv2.cv2 as cv2
+import time
+import traceback
+from pathlib import Path
 
 """class PresentPieChart:
     def __init__(self, labels=0, sizes_of_alternatives_in_list=0):
@@ -28,7 +33,25 @@ import matplotlib.pyplot as plt
 
 def building_pie_chart(data_sizes, labels):
     def presenting_pie_chart(pie_chart_to_show):
-        pie_chart_to_show.show()
+        pie_chart_to_show.savefig('pie_chart.png')
+        file = str(Path().resolve()) + r'\pie_chart.png'
+        try:
+            time.sleep(4)
+            image = cv2.imread(file)
+        except:
+            print('Except reached')
+            try:
+                time.sleep(5)
+                image = cv2.imread(file)
+            except:
+                print(traceback.print_exc())
+                return
+
+        to_continue = True
+
+        cv2.imshow("Results", image)
+        cv2.waitKey(0)
+
     try:
         fig1, ax1 = plt.subplots()
 

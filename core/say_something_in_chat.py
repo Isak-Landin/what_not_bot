@@ -6,9 +6,10 @@ import traceback
 from selenium.webdriver.common.keys import Keys
 from sys import exit
 from pathlib import Path
+import os
 
 
-def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
+def say_something(store_self, driver, to_greet, already_greeted_list, last_greeting_time,
                   commands_to_be_executed, last_command_time, command_all_data):
     with open(str(Path().resolve()) + r'\core\greetings.json', 'r') as file:
         phrases = json.load(file)
@@ -23,7 +24,7 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
             _xpath='//*[@id="app"]/div[1]/div[2]/div[3]/div/div[7]/div[1]/input'
         )
 
-        print(chatbox)
+        print(chatbox, 'All the following finds will be taking place in say_something_in_chat.py')
 
         if succeeded is False:
             chatbox, succeeded = sop.find_object_XPATH(
@@ -67,9 +68,21 @@ def say_something(driver, to_greet, already_greeted_list, last_greeting_time,
                                 time_to_wait=5,
                                 _xpath='/html/body/div/div[1]/div[2]/div[4]/div/div[4]/div[1]/input'
                             )
+
+                            if succeeded is False:
+                                input('Could not find any message_box to send messages in. Make sure you'
+                                      'have the correct one in your chat_input.json file, then press enter')
+                                try:
+                                    with open(str(Path().resolve()) + r'\core\chat_input.json', 'r') as file:
+                                        chatbox = json.load(file)
+                                        chatbox = chatbox['chat']
+                                        succeeded = True
+                                except:
+                                    succeeded = False
+
     except:
-        print(traceback.print_exc())
-        exit('Failed finding chatbox!!')
+        exit('You should kill the program, chat_input was never found due to an internal error'
+             'or failure providing a correct input adress')
 
     if succeeded is False:
         exit('Could not find the chatbox, SHUTTING DOWN')

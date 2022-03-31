@@ -3,6 +3,8 @@ from help_scripts import selenium_operator as sop
 from core import initiate_control_port as selenium_override
 import traceback
 from sys import exit
+from pathlib import Path
+import json
 
 
 class Reading:
@@ -41,6 +43,15 @@ class Reading:
                 time_to_wait=2,
                 _xpath='//*[@id="app"]/div[2]/div/div/div[1]/div[4]/div/div[1]/div[3]/div[2]'
             )
+
+            if succeeded is False:
+                try:
+                    with open(str(Path().resolve()) + r'\core\chat_input.json', 'r') as file:
+                        chat_element = json.load(file)
+                        chat_element = chat_element['chat_div']
+                        succeeded = True
+                except:
+                    succeeded = False
 
         if succeeded is False:
             exit('Could not establish the chat window. The program is shutting down')
